@@ -6,6 +6,7 @@
 //  Loading packages to support the server
 // *********************************************************** //
 // First we load in all of the packages we need for the server...
+const dontev=require('dotenv').config();
 const createError = require("http-errors"); // to handle the server errors
 const express = require("express");
 const path = require("path");  // to refer to local paths
@@ -39,8 +40,9 @@ const movies= require ('./public/data/movies.json')
 const mongoose = require( 'mongoose' );
 
 const mongodb_URI = process.env.mongodb_URI
+
 //const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
-//const mongodb_URI = 'mongodb+srv://cs_sj:BrandeisSpr22@cluster0.kgugl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+//const mongodb_URI = 'mongodb+srv://user01:test123@clustersy.cztpd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
 // fix deprecation warnings
