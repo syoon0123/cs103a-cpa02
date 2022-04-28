@@ -24,6 +24,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 //const ToDoItem = require("./models/ToDoItem")
 //const Schedule = require('./models/Schedule')
 const Movie = require('./models/Movie')
+const watchListItem= require('./models/watchListItem')
 
 // *********************************************************** //
 //  Loading JSON datasets
@@ -187,6 +188,20 @@ app.get('/todo',
   }
   )
 
+  app.get('/toWatch',
+  isLoggedIn,   // redirect to /login if user is not logged in
+  async (req,res,next) => {
+    try{
+      let userId = res.locals.user._id;  // get the user's id
+      let items = await ToDoItem.find({userId:userId}); // lookup the user's todo items
+      res.locals.items = items;  //make the items available in the view
+      res.render("toDo");  // render to the toDo page
+    } catch (e){
+      next(e);
+    }
+  }
+  )
+
   app.post('/todo/add',
   isLoggedIn,
   async (req,res,next) => {
@@ -290,20 +305,82 @@ function time2str(time){
 
 app.get('/upsertDB',
   async (req,res,next) => {
-    await Course.deleteMany({})
-    for (course of courses){ 
-      const {subject,coursenum,section,term}=course;
-      const num = getNum(coursenum);
-      course.num=num
-      course.suffix = coursenum.slice(num.length)
-      await Course.findOneAndUpdate({subject,coursenum,section,term},course,{upsert:true})
+    await Movie.deleteMany({})
+    for (movie of movies){ 
+      const {title,year,cast,genres}=movie;
+    
+      await Movie.findOneAndUpdate({title,year,cast,genres},movie,{upsert:true})
     }
-    const num = await Course.find({}).countDocuments();
+    const num = await Movie.find({}).countDocuments();
     res.send("data uploaded: "+num)
   }
 )
+app.post('/movies/byYear',
+  // show list of courses in a given subject
+  async (req,res,next) => {
+    const {year} = req.body;
+    const movies = await Movie.find({year:year}).sort({title:"asc"})
+    
+    res.locals.movies = movies
+    //res.locals.times2str = times2str
+    //res.json(courses)
+    res.render('movielist')
+  }
+)
+app.get('/movies/byYear/:year',
+  // show list of courses in a given subject
+  async (req,res,next) => {
+    const {year} = req.body;
+    const movies = await Movie.find({year:year}).sort({title:"asc"})
+    
+    res.locals.movies = movies
+    //res.locals.times2str = times2str
+    //res.json(courses)
+    res.render('movielist')
+  }
+)
+app.post('/movies/byKey',
+  // show list of courses that have the given keyword in their course name
+  async (req, res, next) => {
+    const { keyword } = req.body;
+    let movies = []
+    if (keyword !== "") {
+      movies = await Movie.find({ title: { $regex: keyword } }).sort({ title: "asc"})
+    }
+    res.locals.movies = movies
+    // res.locals.times2str = times2str
+    res.render('movielist')
+  }
+)
+app.post('/movies/byGenre',
+  // show courses taught by a faculty send from a form
+  async (req, res, next) => {
+    const {genre} = req.body;
+    const movies =
+      await Movie
+        .find({ genres: genre})
+        .sort({ title: "asc" })
+    //res.json(courses)
+    res.locals.movies = movies
+    // res.locals.times2str = times2str
+    res.render('movielist')
+  }
+)
 
-
+app.post('/movies/byCast',
+  // show courses taught by a faculty send from a form
+  async (req, res, next) => {
+    const {cast} = req.body;
+    const movies =
+      await Movie
+        .find({ cast: cast})
+        .sort({ title: "asc" })
+    //res.json(courses)
+    res.locals.movies = movies
+    // res.locals.times2str = times2str
+    res.render('movielist')
+  }
+)
 app.post('/courses/bySubject',
   // show list of courses in a given subject
   async (req,res,next) => {
@@ -603,7 +680,54 @@ app.get('/addCourse/:courseId',
       next(e)
     }
   })
+  app.get('/addMovie/:movieId',
+  // add a course to the user's schedule
+  async (req,res,next) => {
+    try {
+      const movieId = req.params.movieId
+      const userId = res.locals.user._id
+      // check to make sure it's not already loaded
+      const lookup = await watchListItem.find({movieId,userId})
+      if (lookup.length==0){
+        const watchListItem = new watchListItem({movieId,userId})
+        await watchListItem.save()
+      }
+      res.redirect('/watchListItem/show')
+    } catch(e){
+      next(e)
+    }
+  })
+  app.get('/watchListItem/show',
+  // show the current user's schedule
+  async (req,res,next) => {
+    try{
+      const userId = res.locals.user._id;
+      const movieIds = 
+         (await watchListItem.find({userId}))
+                        .sort(x => x.title)
+                        .map(x => x.movieId)
+      res.locals.movies = await Movie.find({_id:{$in: movieIds}})
+      res.render('watchlist')
+    } catch(e){
+      next(e)
+    }
+  }
+)
 
+app.get('/watchListItem/remove/:movieId',
+  // remove a course from the user's schedule
+  async (req,res,next) => {
+    try {
+      await watchListItem.remove(
+                {userId:res.locals.user._id,
+                 movieId:req.params.movieId})
+      res.redirect('/watchListItem/show')
+
+    } catch(e){
+      next(e)
+    }
+  }
+)
 app.get('/schedule/show',
   // show the current user's schedule
   async (req,res,next) => {
@@ -611,7 +735,7 @@ app.get('/schedule/show',
       const userId = res.locals.user._id;
       const courseIds = 
          (await Schedule.find({userId}))
-                        .sort(x => x.term)
+                        .sort(x => x.title)
                         .map(x => x.courseId)
       res.locals.courses = await Course.find({_id:{$in: courseIds}})
       res.render('schedule')

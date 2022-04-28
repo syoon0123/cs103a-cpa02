@@ -1,0 +1,12 @@
+<ul>
+    <% for (movie of movies){%>
+        <li> 
+            <a href="/watchListItem/remove/<%= movie._id %>">X</a>
+            <%= movie['title'] %>
+            <%= movie.year %>
+            <%= movie.cast %>
+            <%= movie.genres %>
+            
+        </li>
+    <% } %>
+</ul>

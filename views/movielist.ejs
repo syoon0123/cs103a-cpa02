@@ -1,0 +1,32 @@
+<h1>The following movies were found: </h1>
+
+<hr>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Cast</th>
+            <th>Add to Movie List</th>
+        
+        </tr>
+    </thead>
+    <tbody>
+        <% for (movie of movies){ %>
+            <tr>
+                <td><%= movie['title'] %> </td>
+                <td><%= movie['genres'] %></td>
+                <td><%= movie['year'] %></td>
+                <td><%= movie['cast']%></td>
+                <td> <div><a href="/addMovie/<%= movie['_id'] %>">add Movie</a></div></td>
+             
+            </tr>
+        <% } %>
+        </tbody>
+    
+
+
+    
+</table>
+

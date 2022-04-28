@@ -1,30 +1,45 @@
 
-
+<br>
+<br>
     <div class="jumbotron">
-        <h1>Movie Finder </h1>
+        <h1 class="text-center">Movie Finder </h1>
         <p></p>
     </div>
 
-    <p class="p-3 m-3 border border-primary bg-info">
+    <p class="p-3 m-3 border border-warning bg-light">
         This app will allow users to filter through many movies using keywords in movie titles, cast, and genre.
     </p>
     
     <% if (true || loggedIn) {%>  
-        <form method="post" action="/courses/bySubject">
-            Show Courses by Subject: 
-              <input type="text" name="subject" 
-                     placeholder="e.g. COSI">
+        <form method="post" action="/movies/byGenre">
+            Find Movies by Genre: 
+              <input type="text" name="genre" 
+                     placeholder="e.g. Crime">
             <input type="submit">
         </form>
         <br>
-        <form method="post" action="/courses/byInst">
-            Show Courses by Instructor Email: 
-            <input type="text" name="email" 
-                   placeholder="e.g. tjhickey">
+        <form method="post" action="/movies/byCast">
+            Find Movies by Actor/Actress: 
+            <input type="text" name="cast" 
+                   placeholder="e.g. Betty White">
             <input type="submit">
         </form>
         <br>
-        <a href="/schedule/show">Show Schedule</a>
+        <form method="post" action="/movies/byKey">
+            Find Movies by Keyword in Title: 
+            <input type="text" name="keyword" 
+                   placeholder="e.g. Letter">
+            <input type="submit">
+        </form>
+        <br>
+        <form method="post" action="/movies/byYear">
+            Find Movies by Year: 
+            <input type="text" name="year" 
+                   placeholder="e.g. Letter">
+            <input type="submit">
+        </form>
+        <br>
+        <a href="/schedule/show">My Movie List</a>
     <% } %>
 
 
