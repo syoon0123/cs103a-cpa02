@@ -1,11 +1,14 @@
+
+<div class="bg-light border border-primary p-3 rounded m-3">
+    <h1 class="display-4 text-center">Movie Watch List</h1>
+    
+</div>
 <ul>
     <% for (movie of movies){%>
         <li> 
-            <a href="/watchListItem/remove/<%= movie._id %>">X</a>
+            
             <%= movie['title'] %>
-            <%= movie.year %>
-            <%= movie.cast %>
-            <%= movie.genres %>
+            <a href="/watchListItem/remove/<%= movie._id %>">Remove</a>
             
         </li>
     <% } %>
