@@ -17,4 +17,4 @@ After these prerequisites are met, the project can be started using the follwoin
 
 ## Video Demo 
 
-Here is a link to a quick demo of how to use the app. 
+Here is a <a href="https://drive.google.com/file/d/1-6Ueg04K80dcr-8Sm3sR9CZZ6ueW6dq4/view?usp=sharing">link</a> to a quick demo of how to use the app. 
