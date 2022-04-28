@@ -9,7 +9,7 @@ Link to Heroku: https://fast-atoll-92804.herokuapp.com/
 
 Prerequisites: installation of nodejs and npm
 
-After these prerequisites are met, the project can be started using the follwoing: 
+After these prerequisites are met, the project can be started using the following: 
 
 ``` 
 ./startup.sh
@@ -17,4 +17,4 @@ After these prerequisites are met, the project can be started using the follwoin
 
 ## Video Demo 
 
-Here is a <a href="https://drive.google.com/file/d/1-6Ueg04K80dcr-8Sm3sR9CZZ6ueW6dq4/view?usp=sharing">link</a> to a quick demo of how to use the app. 
+Here is a <a href="https://brandeis.zoom.us/rec/share/joOrz1PL8Pxyr-bUX10ZCLMV8hp6YrI9WyfwhMXesxUd3kp1EEwhmktKYNlSDKO6.se0mJCz1_uJ0BTQA?startTime=1651176835000">link</a> to a quick demo of how to use the app. 
