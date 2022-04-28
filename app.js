@@ -680,6 +680,8 @@ app.get('/addCourse/:courseId',
       next(e)
     }
   })
+
+  //const watchListItem= require('./models/watchListItem')
   app.get('/addMovie/:movieId',
   // add a course to the user's schedule
   async (req,res,next) => {
@@ -689,8 +691,8 @@ app.get('/addCourse/:courseId',
       // check to make sure it's not already loaded
       const lookup = await watchListItem.find({movieId,userId})
       if (lookup.length==0){
-        const watchListItem = new watchListItem({movieId,userId})
-        await watchListItem.save()
+        const watchlistitem = new watchListItem({movieId,userId})
+        await watchlistitem.save()
       }
       res.redirect('/watchListItem/show')
     } catch(e){
